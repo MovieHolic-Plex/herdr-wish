@@ -27,6 +27,7 @@
   <a href="https://github.com/MovieHolic-Plex/herdr-wish/stargazers"><img src="https://img.shields.io/github/stars/MovieHolic-Plex/herdr-wish?style=for-the-badge&color=d4a24a" alt="stars"></a>
   <a href="https://github.com/MovieHolic-Plex/herdr-wish/commits/main"><img src="https://img.shields.io/github/last-commit/MovieHolic-Plex/herdr-wish?style=for-the-badge&color=7c3aed" alt="last commit"></a>
   <img src="https://img.shields.io/badge/Windows%20·%20macOS%20·%20Linux-111827?style=for-the-badge" alt="platforms">
+  <a href="https://github.com/DevNewbie1826/omo-wish"><img src="https://img.shields.io/badge/omo-wish%20·%20mass%20ulw%20DAG-c084fc?style=for-the-badge" alt="omo /wish mass ulw DAG"></a>
 </p>
 
 <p align="center">
