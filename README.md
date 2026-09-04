@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <i>한 문장. 한 칸. <code>/wish</code>. 한 PR.</i>
+  <i>한 문장. 한 칸. <code>/wish</code>. mass ulw DAG. APPROVED 가 나올 때까지.</i>
 </p>
 
 <p align="center">
@@ -32,6 +32,7 @@
 <p align="center">
   <a href="#-램프를-켜는-법">설치</a> ·
   <a href="#핵심-wish">/wish</a> ·
+  <a href="#기법-mass-ulw-dag">기법</a> ·
   <a href="#-두-가지-주문">주문</a> ·
   <a href="#-쓰기">쓰기</a> ·
   <a href="#-설정">설정</a> ·
@@ -100,6 +101,99 @@ omo install https://github.com/DevNewbie1826/omo-wish --no-approve
 ```
 
 이미 있으면 그대로 두고, 없을 때만 이 명령을 대신 친다. 그 다음 새 워크트리에서 omo를 켜므로 방금 깐 스킬이 세션에 들어간다.
+
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
+
+## 기법: mass ulw DAG
+
+램프가 넣는 한 줄은 채팅이 아니다. [omo-wish](https://github.com/DevNewbie1826/omo-wish) 가 **ultrawork + ulw loop + mass ulw** 오케스트레이션을 켠다. 소원은 목표가 되고, 목표는 DAG 가 되고, DAG 는 PR 이 된다.
+
+<p align="center">
+  <img src="assets/dag.svg" width="920" alt="mass ulw DAG — explore, group, DAG, merge, final review">
+</p>
+
+### 1. ultrawork explore — 목표는 하나
+
+맥락과 히스토리를 읽고, 증거로 문제를 가른 다음 **이상적인 상태를 최상위 목표 하나**로 고정한다.  
+그 다음부터 태스크·리뷰·머지는 전부 이 목표의 하인이다. 태스크는 별도 목표가 아니다.
+
+### 2. 관련되면 한 태스크, 아니면 DAG
+
+서로 정합성을 해칠 수 있으면 한 태스크에 묶는다. 의심스러우면 붙이거나 의존으로 둔다.  
+독립일 때만 갈라서 **동시에** 돌린다. 의존하는 태스크는 앞 태스크가 merge 된 뒤에야 시작한다.
+
+### 3. 태스크마다 mass ulw DAG
+
+태스크 하나 = 전용 git worktree + 전용 PR + 전용 리뷰 루프 + 전용 merge.
+
+체인 모양은 항상 같다. 작은 수정도 예외가 없다.
+
+```
+impl ──► verify ──► PR ──► ultrabrain
+  │
+  └─ 독립이면 구현 노드끼리 병렬
+```
+
+| 노드 | 하는 일 |
+| --- | --- |
+| **impl** | 실제 코드. 서로 정확성을 안 해칠 때만 병렬, 아니면 의존 순서 |
+| **verify** | 그 DAG 가 맞는지 검증 |
+| **PR** | PR 본문에 **이 DAG run 을 인용** |
+| **ultrabrain** | 마지막 노드. 판결은 `APPROVED` 아니면 `REVISE` 뿐 |
+
+오케스트레이션 세션은 저장소 파일을 **절대 직접 고치지 않는다.** 충돌 해소까지 포함해, 모든 변경은 DAG 노드가 한다.
+
+### 4. REVISE 면 fix DAG
+
+`REVISE` 가 나오면 번호 매긴 요구 사항이 나온다.  
+같은 워크트리에서 다음 DAG 를 깐다. 요구 사항마다 deep agent 를 붙이고, 독립이면 병렬, 그다음 verify → ultrabrain 재검토. `APPROVED` 가 나올 때까지 반복한다.
+
+`APPROVED` 없이 main 에 올리는 일은 없다.
+
+### 5. merge 는 한 줄씩, 마지막에 전체를 본다
+
+- merge 는 **한 번에 하나씩**
+- 직전: 최신 main 과 동기화하고 검증을 다시 돌린다
+- 충돌, 리뷰한 diff 가 바뀜, 재검증 실패 → 그 태스크를 **fix DAG** 로 되돌린다. ultrabrain 이 다시 `APPROVED` 를 준 뒤에만 merge
+- 나중에 발견한 일은 같은 관련성 규칙으로 기존 태스크에 합치거나 새 태스크로 묶는다
+- 모든 태스크가 merge 되고 main 이 초록이면, ultrabrain 이 **전체 main 을 처음 그 최상위 목표**로 다시 본다
+- 여기서 `REVISE` 면 그 지적을 같은 루프의 새 태스크로 넣는다
+
+ulw loop 가 끝나는 조건은 세 가지가 **동시에** 참일 때뿐이다.
+
+1. 모든 태스크가 `APPROVED` 로 merge 됨  
+2. main 이 초록  
+3. 최종 전체 검토가 `APPROVED`
+
+```mermaid
+flowchart TB
+  E["ultrawork explore"] --> G["최상위 목표 1개"]
+  G --> L["ulw loop"]
+  L --> T1["task A · worktree · PR"]
+  L --> T2["task B · worktree · PR"]
+  T1 --> D1["mass ulw DAG"]
+  T2 --> D2["mass ulw DAG"]
+  D1 --> I1["impl"]
+  I1 --> V1["verify"]
+  V1 --> P1["PR cites DAG"]
+  P1 --> U1{"ultrabrain"}
+  U1 -->|REVISE| F1["fix DAG · deep agents"]
+  F1 --> U1
+  U1 -->|APPROVED| M["merge one-by-one<br/>sync main · re-verify"]
+  D2 --> I2["impl"]
+  I2 --> V2["verify"]
+  V2 --> P2["PR cites DAG"]
+  P2 --> U2{"ultrabrain"}
+  U2 -->|APPROVED| M
+  M --> FIN{"전체 main vs 목표"}
+  FIN -->|REVISE| L
+  FIN -->|APPROVED + green| X["loop ends"]
+```
+
+이 기계의 본문은 [`prompts/wish.md`](https://github.com/DevNewbie1826/omo-wish/blob/main/prompts/wish.md) 다.  
+`wish-ultrawork-arm.js` 가 슬래시 확장 **이후** 텍스트에서 `ultrawork` / `ulw` 를 보고 세션을 arm 한다. 그래서 이 플러그인이 `/wish` 를 **강제로** 앞에 붙이는 것이다. 빼면 램프가 아니라 그냥 문장이다.
 
 <p align="center">
   <img src="assets/divider.svg" width="560" alt="">

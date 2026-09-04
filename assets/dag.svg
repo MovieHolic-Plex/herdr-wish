@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 420" role="img" aria-label="mass ulw DAG">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0614"/>
+      <stop offset="100%" stop-color="#1a0c22"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffe08a"/>
+      <stop offset="100%" stop-color="#d4a24a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1180" height="420" rx="24" fill="url(#bg)" stroke="#d4a24a" stroke-opacity="0.35"/>
+  <text x="40" y="48" fill="#ffd56a" font-family="ui-monospace, Consolas, monospace" font-size="14" letter-spacing="4">MASS ULW  ·  ONE LOOP  ·  MANY DAGS</text>
+
+  <rect x="36" y="72" width="200" height="72" rx="12" fill="#22142e" stroke="#d4a24a"/>
+  <text x="56" y="102" fill="#fff6d6" font-family="Georgia, Times New Roman, serif" font-size="18">1 explore</text>
+  <text x="56" y="126" fill="#c4b5d6" font-family="ui-monospace, Consolas, monospace" font-size="12">one top-level goal</text>
+
+  <rect x="268" y="72" width="200" height="72" rx="12" fill="#22142e" stroke="#c084fc"/>
+  <text x="288" y="102" fill="#f5e1ff" font-family="Georgia, Times New Roman, serif" font-size="18">2 group</text>
+  <text x="288" y="126" fill="#c4b5d6" font-family="ui-monospace, Consolas, monospace" font-size="12">related = one task</text>
+
+  <rect x="500" y="72" width="200" height="72" rx="12" fill="#22142e" stroke="#67e8f9"/>
+  <text x="520" y="102" fill="#e0f7fa" font-family="Georgia, Times New Roman, serif" font-size="18">3 DAG / task</text>
+  <text x="520" y="126" fill="#c4b5d6" font-family="ui-monospace, Consolas, monospace" font-size="12">worktree + PR</text>
+
+  <rect x="732" y="72" width="200" height="72" rx="12" fill="#22142e" stroke="#86efac"/>
+  <text x="752" y="102" fill="#dcfce7" font-family="Georgia, Times New Roman, serif" font-size="18">4 merge</text>
+  <text x="752" y="126" fill="#c4b5d6" font-family="ui-monospace, Consolas, monospace" font-size="12">one at a time</text>
+
+  <rect x="964" y="72" width="180" height="72" rx="12" fill="#22142e" stroke="#ffd56a"/>
+  <text x="984" y="102" fill="#fff6d6" font-family="Georgia, Times New Roman, serif" font-size="18">5 final</text>
+  <text x="984" y="126" fill="#c4b5d6" font-family="ui-monospace, Consolas, monospace" font-size="12">ultrabrain on main</text>
+
+  <text x="40" y="186" fill="#e9d5ff" font-family="ui-monospace, Consolas, monospace" font-size="13" letter-spacing="2">EACH TASK DAG</text>
+
+  <rect x="36" y="206" width="210" height="88" rx="12" fill="#16101f" stroke="#67e8f9"/>
+  <text x="56" y="242" fill="#e0f7fa" font-family="Georgia, Times New Roman, serif" font-size="20">impl</text>
+  <text x="56" y="268" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="12">parallel if independent</text>
+
+  <rect x="278" y="206" width="210" height="88" rx="12" fill="#16101f" stroke="#67e8f9"/>
+  <text x="298" y="242" fill="#e0f7fa" font-family="Georgia, Times New Roman, serif" font-size="20">verify</text>
+  <text x="298" y="268" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="12">must pass</text>
+
+  <rect x="520" y="206" width="210" height="88" rx="12" fill="#16101f" stroke="#67e8f9"/>
+  <text x="540" y="242" fill="#e0f7fa" font-family="Georgia, Times New Roman, serif" font-size="20">PR</text>
+  <text x="540" y="268" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="12">body cites the DAG run</text>
+
+  <rect x="762" y="206" width="382" height="88" rx="12" fill="#16101f" stroke="#ffd56a"/>
+  <text x="782" y="242" fill="#fff6d6" font-family="Georgia, Times New Roman, serif" font-size="20">ultrabrain</text>
+  <text x="782" y="268" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="12">APPROVED  or  REVISE ’ fix DAG</text>
+
+  <text x="40" y="336" fill="#c4b5d6" font-family="Georgia, Times New Roman, serif" font-size="16">Orchestrator never touches the repo. Every edit is a DAG node.</text>
+  <text x="40" y="368" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="13">ulw loop ends only when all tasks are APPROVED, main is green, and the final review is APPROVED.</text>
+  <text x="40" y="396" fill="#d4a24a" font-family="ui-monospace, Consolas, monospace" font-size="13">/wish {sentence} and commit and make pr</text>
+</svg>
