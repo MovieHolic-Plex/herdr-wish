@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" role="img" aria-label="make a wish modal">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1b1228"/>
+      <stop offset="100%" stop-color="#120c1c"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="280" rx="18" fill="#0b0812"/>
+  <rect x="28" y="28" width="504" height="224" rx="14" fill="url(#panel)" stroke="#d4a24a" stroke-width="2"/>
+  <text x="52" y="68" fill="#f6f0e6" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700">make a wish</text>
+  <rect x="52" y="88" width="456" height="36" rx="6" fill="#2a2236"/>
+  <text x="66" y="112" fill="#f6f0e6" font-family="ui-monospace, Consolas, monospace" font-size="16">fix the login bug</text>
+  <rect x="318" y="96" width="8" height="20" fill="#f0c36a">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+  </rect>
+  <text x="52" y="148" fill="#9b8bb0" font-family="Georgia, 'Times New Roman', serif" font-size="14">omo will commit and make a PR</text>
+  <rect x="52" y="176" width="88" height="32" rx="6" fill="#d4a24a"/>
+  <text x="66" y="197" fill="#1a1208" font-family="ui-monospace, Consolas, monospace" font-size="14" font-weight="700">µ wish</text>
+  <rect x="152" y="176" width="72" height="32" rx="6" fill="none" stroke="#6b5a7a"/>
+  <text x="166" y="197" fill="#d8cce6" font-family="ui-monospace, Consolas, monospace" font-size="14">clear</text>
+  <rect x="236" y="176" width="80" height="32" rx="6" fill="none" stroke="#6b5a7a"/>
+  <text x="250" y="197" fill="#d8cce6" font-family="ui-monospace, Consolas, monospace" font-size="14">cancel</text>
+</svg>
