@@ -9,11 +9,11 @@
 <h1 align="center">🧞 herdr-wish</h1>
 
 <p align="center">
-  <b>소원 한 줄이면, 새 워크트리에서 omo가 커밋하고 PR까지 민다.</b>
+  <b>소원 한 줄이면, 새 워크트리에서 omo에 <code>/wish</code> 를 강제로 넣는다.</b>
 </p>
 
 <p align="center">
-  <i>한 문장. 한 칸. 한 PR.</i>
+  <i>한 문장. 한 칸. <code>/wish</code>. 한 PR.</i>
 </p>
 
 <p align="center">
@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="#-램프를-켜는-법">설치</a> ·
+  <a href="#핵심-wish">/wish</a> ·
   <a href="#-두-가지-주문">주문</a> ·
   <a href="#-쓰기">쓰기</a> ·
   <a href="#-설정">설정</a> ·
@@ -56,7 +57,7 @@
 </p>
 
 <p align="center">
-  <code>make a wish</code> &nbsp;→&nbsp; <code>↵ wish</code> &nbsp;→&nbsp; 새 워크트리 &nbsp;→&nbsp; omo &nbsp;→&nbsp; commit + PR
+  <code>make a wish</code> &nbsp;→&nbsp; 새 워크트리 &nbsp;→&nbsp; omo &nbsp;→&nbsp; <code>/wish {소원} and commit and make pr</code>
 </p>
 
 <p align="center">
@@ -73,8 +74,30 @@
   <img src="assets/before-after.svg" width="880" alt="before four steps, after one box">
 </p>
 
-램프는 마법이 아니다. [Herdr](https://herdr.dev) CLI를 순서대로 두드리는 플러그인이다.  
-다만 우클릭 한 번으로, **지금 보고 있는 칸을 더럽히지 않는다.**
+램프는 마법이 아니다. [Herdr](https://herdr.dev) 가 칸을 열고, [omo `/wish`](https://github.com/DevNewbie1826/omo-wish) 가 일을 한다.  
+우클릭 한 번으로 **지금 보고 있는 칸을 더럽히지 않고**, omo 입력창에 `/wish` 를 직접 치지 않아도 된다.
+
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
+
+## 핵심: /wish
+
+이게 이 플러그인의 전부다. 모달에 적은 문장은 평범한 채팅으로 가지 않는다. omo 슬래시 스킬 **`/wish`** 로 들어간다.
+
+```
+/wish fix the login bug and commit and make pr
+```
+
+이미 `/wish` 로 시작해도 한 번만 붙는다. 끝에 `and commit and make pr` 이 있으면 한 번 더 붙이지 않는다.
+
+[`DevNewbie1826/omo-wish`](https://github.com/DevNewbie1826/omo-wish) 가 그 스킬이다. ultrawork explore, 태스크 묶기, 워크트리·PR, ulw loop. 이 플러그인은 그 주문을 **빠뜨리지 못하게** 앞에 고정한다.
+
+```sh
+omo install https://github.com/DevNewbie1826/omo-wish
+```
+
+설치 후 새 omo 세션(또는 `/reload`)부터 메뉴에 `wish — 소원을 빕니다` 가 뜬다. 이 패키지 없이 `/wish` 를 넣으면 스킬이 아니라 그냥 글자다.
 
 <p align="center">
   <img src="assets/divider.svg" width="560" alt="">
@@ -91,13 +114,12 @@
 | 소환 | git 스페이스 우클릭 | git 스페이스 우클릭 / `prefix+shift+w` |
 | 워크트리 | **하나.** 영어면 `wish-fix-the-login-bug`, 한글만 있으면 `wish-1` | `omo-1` … `omo-10`. 이미 있으면 이어서 |
 | 에이전트 | 그 칸에서 `omo` | 칸마다 `omo` |
-| 프롬프트 | `{소원} and commit and make pr` | 없음. 열 개만 깐다 |
+| 프롬프트 | **강제** <code>/wish {소원} and commit and make pr</code> | 없음. 열 개만 깐다 |
 | 빈 입력 | 보내지 않음 | — |
 
 우클릭 **wish** 는 Rename 과 같은 입력 창이다.  
-제목 `make a wish`. 힌트 `omo will commit and make a PR`. 버튼 `↵ wish`.
+제목 `make a wish`. 힌트 `omo /wish — commit and make a PR`. 버튼 `↵ wish`.
 
-이미 문장 끝에 `and commit and make pr` 이 있으면 한 번 더 붙이지 않는다.  
 `prefix+shift+w` 는 **omo-10** 이다. 소원을 비는 키가 아니다.
 
 > 열 개를 진짜로 깐다. 실험은 버려도 되는 저장소에서 하라.
@@ -108,9 +130,10 @@
 
 ## 램프를 켜는 법
 
-준비물: [Herdr](https://herdr.dev) `0.8+` · [Node.js](https://nodejs.org) `18+` · PATH 위의 `omo`
+준비물: [Herdr](https://herdr.dev) `0.8+` · [Node.js](https://nodejs.org) `18+` · PATH 위의 `omo` · [omo-wish](https://github.com/DevNewbie1826/omo-wish) (`/wish` 스킬)
 
 ```bash
+omo install https://github.com/DevNewbie1826/omo-wish
 herdr plugin install MovieHolic-Plex/herdr-wish --yes
 ```
 
@@ -167,10 +190,10 @@ herdr plugin action invoke cast --plugin local.wish
 
 부모 저장소에 워크트리를 **새로** 만든다.  
 영어 소원은 `wish-fix-the-login-bug`. 한글만 있으면 `wish-1`부터. 이미 있는 이름은 `-2`로 민다.  
-새 칸에서 `omo`를 켠 다음 프롬프트를 넣는다.
+새 칸에서 `omo`를 켠 다음, 아래를 **그대로** 넣는다.
 
 ```
-fix the login bug and commit and make pr
+/wish fix the login bug and commit and make pr
 ```
 
 ### omo-10 — 한 번에 열 칸
@@ -240,7 +263,7 @@ flowchart LR
   W["🧞 wish"] --> M["make a wish"]
   M --> T["worktree × 1"]
   T --> O["omo"]
-  O --> P["{wish} and commit and make pr"]
+  O --> P["/wish {소원} and commit and make pr"]
   P --> R["PR"]
 
   X["✨ omo-10"] --> N["worktree × 10"]

@@ -1,8 +1,8 @@
 {
   "name": "herdr-wish",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
-  "description": "Herdr plugin: make a wish and omo commits a PR. omo-10 opens 10 worktrees.",
+  "description": "Herdr plugin: force omo /wish on a new worktree, then commit and PR. omo-10 opens 10 worktrees.",
   "license": "MIT",
   "scripts": {
     "test": "node --test wish.test.js"

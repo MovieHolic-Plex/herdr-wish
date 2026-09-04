@@ -8,6 +8,7 @@ const DEFAULT_COUNT = 10;
 const DEFAULT_COMMAND = "omo";
 const DEFAULT_PREFIX = "omo";
 const WISH_TREE_PREFIX = "wish";
+const SKILL_PREFIX = "/wish";
 const PROMPT_SUFFIX = "and commit and make pr";
 const WISH_SLUG_MAX = 40;
 
@@ -118,14 +119,18 @@ function resolveWishText() {
 }
 
 function buildPrompt(wish) {
-  const text = String(wish || "").trim();
-  if (!text) {
+  const raw = String(wish || "").trim();
+  if (!raw) {
     return "";
   }
-  if (text.toLowerCase().endsWith(PROMPT_SUFFIX)) {
-    return text;
+  const body = raw.replace(/^\s*\/wish\b\s*/i, "").trim();
+  if (!body) {
+    return SKILL_PREFIX;
   }
-  return `${text} ${PROMPT_SUFFIX}`;
+  const withSuffix = body.toLowerCase().endsWith(PROMPT_SUFFIX)
+    ? body
+    : `${body} ${PROMPT_SUFFIX}`;
+  return `${SKILL_PREFIX} ${withSuffix}`;
 }
 
 function startOmoOnPane(herdr, paneId, command) {

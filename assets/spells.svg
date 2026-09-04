@@ -11,7 +11,7 @@
   <text x="40" y="58" fill="#ffd56a" font-family="ui-monospace, Consolas, monospace" font-size="14" letter-spacing="4">SPELL 01</text>
   <text x="40" y="104" fill="#fff6d6" font-family="Georgia, Times New Roman, serif" font-size="42" font-weight="700">wish</text>
   <text x="40" y="148" fill="#e8d7ff" font-family="Georgia, Times New Roman, serif" font-size="18">one worktree  ·  one omo  ·  one PR</text>
-  <text x="40" y="188" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="15">+ and commit and make pr</text>
+  <text x="40" y="188" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="15">/wish + commit and make pr</text>
   <text x="40" y="220" fill="#f0c36a" font-family="ui-monospace, Consolas, monospace" font-size="14">right-click a git space</text>
 
   <rect x="564" y="8" width="528" height="244" rx="22" fill="url(#card)" stroke="#c084fc" stroke-width="2"/>

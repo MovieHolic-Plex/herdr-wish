@@ -24,15 +24,24 @@ test("skips names that already exist", () => {
   assert.deepEqual(nextWishNames(used, "wish", 2), ["wish-3", "wish-4"]);
 });
 
-test("appends commit-and-PR instruction once", () => {
+test("forces the omo /wish skill and appends commit-and-PR once", () => {
   assert.equal(
     buildPrompt("fix login"),
-    "fix login and commit and make pr",
+    "/wish fix login and commit and make pr",
+  );
+  assert.equal(
+    buildPrompt("/wish fix login"),
+    "/wish fix login and commit and make pr",
   );
   assert.equal(
     buildPrompt("fix login and commit and make pr"),
-    "fix login and commit and make pr",
+    "/wish fix login and commit and make pr",
   );
+  assert.equal(
+    buildPrompt("/wish fix login and commit and make pr"),
+    "/wish fix login and commit and make pr",
+  );
+  assert.equal(buildPrompt("/wish"), "/wish");
 });
 
 test("names a wish worktree from the prompt slug", () => {
