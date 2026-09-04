@@ -10,6 +10,7 @@ const DEFAULT_PREFIX = "omo";
 const WISH_TREE_PREFIX = "wish";
 const SKILL_PREFIX = "/wish";
 const PROMPT_SUFFIX = "and commit and make pr";
+const WISH_SKILL_SOURCE = "https://github.com/DevNewbie1826/omo-wish";
 const WISH_SLUG_MAX = 40;
 
 function main() {
@@ -67,6 +68,8 @@ function castWish() {
   if (!wish) {
     fail("wish text is empty");
   }
+
+  ensureWishSkill();
 
   const { createFrom, listed } = resolveGitFamily(herdr, workspaceId);
   const name = nextWishTreeName(usedBranchNames(listed), wish);
@@ -131,6 +134,105 @@ function buildPrompt(wish) {
     ? body
     : `${body} ${PROMPT_SUFFIX}`;
   return `${SKILL_PREFIX} ${withSuffix}`;
+}
+
+function ensureWishSkill() {
+  if (isWishSkillInstalled()) {
+    process.stdout.write("wish: omo /wish skill is installed\n");
+    return;
+  }
+  process.stdout.write(`wish: omo /wish skill missing; installing ${WISH_SKILL_SOURCE}\n`);
+  const result = spawnSync(omoBin(), ["install", WISH_SKILL_SOURCE, "--no-approve"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    windowsHide: true,
+    timeout: 120000,
+  });
+  const out = `${result.stdout || ""}${result.stderr || ""}`;
+  if (!isWishSkillInstalled()) {
+    fail(
+      `failed to install ${WISH_SKILL_SOURCE} (exit ${result.status})\n${out.slice(0, 800)}`,
+    );
+  }
+  process.stdout.write("wish: installed omo /wish skill\n");
+}
+
+function isWishSkillInstalled(options = {}) {
+  const home = options.home || process.env.USERPROFILE || process.env.HOME || "";
+  const cwd = options.cwd !== undefined ? options.cwd : resolveWorkspaceCwd();
+  const agent = options.agentDir || agentDir(home);
+  const userSettings = readJson(path.join(agent, "settings.json"));
+  const projectSettings = cwd
+    ? readJson(path.join(cwd, ".omo", "settings.json"))
+    : null;
+  const mentioned =
+    settingsHaveWishSkill(userSettings) || settingsHaveWishSkill(projectSettings);
+  const files = wishSkillCheckoutExists(agent);
+  if (mentioned && files) {
+    return true;
+  }
+  if (mentioned || files) {
+    return false;
+  }
+  return listMentionsWishSkill(options.listText ?? omoListText());
+}
+
+function settingsHaveWishSkill(settings) {
+  const packages = settings?.packages;
+  if (!Array.isArray(packages)) {
+    return false;
+  }
+  return packages.some((entry) => /omo-wish/i.test(String(entry)));
+}
+
+function listMentionsWishSkill(text) {
+  return /omo-wish|devnewbie1826\/omo-wish/i.test(String(text || ""));
+}
+
+function wishSkillCheckoutExists(agent) {
+  const root = path.join(agent, "git", "github.com", "DevNewbie1826", "omo-wish");
+  return (
+    fs.existsSync(path.join(root, "prompts", "wish.md")) ||
+    fs.existsSync(path.join(root, "package.json"))
+  );
+}
+
+function agentDir(home) {
+  if (process.env.OMO_CODING_AGENT_DIR) {
+    return process.env.OMO_CODING_AGENT_DIR;
+  }
+  return path.join(home || "", ".omo", "agent");
+}
+
+function resolveWorkspaceCwd() {
+  try {
+    const context = JSON.parse(process.env.HERDR_PLUGIN_CONTEXT_JSON || "{}");
+    return context.workspace_cwd || context.focused_pane_cwd || "";
+  } catch {
+    return "";
+  }
+}
+
+function omoListText() {
+  const result = spawnSync(omoBin(), ["list", "--no-approve"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    windowsHide: true,
+    timeout: 30000,
+  });
+  return `${result.stdout || ""}${result.stderr || ""}`;
+}
+
+function omoBin() {
+  return process.env.OMO_BIN_PATH || "omo";
+}
+
+function readJson(file) {
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf8"));
+  } catch {
+    return null;
+  }
 }
 
 function startOmoOnPane(herdr, paneId, command) {
@@ -371,6 +473,10 @@ module.exports = {
   usedBranchNames,
   buildPrompt,
   slugifyWish,
+  isWishSkillInstalled,
+  settingsHaveWishSkill,
+  listMentionsWishSkill,
+  WISH_SKILL_SOURCE,
 };
 
 if (require.main === module) {

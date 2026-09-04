@@ -2,12 +2,18 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
 const {
   nextWishNames,
   nextWishTreeName,
   usedBranchNames,
   buildPrompt,
   slugifyWish,
+  isWishSkillInstalled,
+  settingsHaveWishSkill,
+  listMentionsWishSkill,
 } = require("./wish.js");
 
 test("picks unused wish-1..wish-N", () => {
@@ -56,6 +62,43 @@ test("names a wish worktree from the prompt slug", () => {
     "wish-fix-the-login-bug-2",
   );
   assert.equal(nextWishTreeName(new Set(["wish-1", "main"]), "로그인 고치기"), "wish-2");
+});
+
+test("detects omo-wish in settings and list output", () => {
+  assert.equal(
+    settingsHaveWishSkill({
+      packages: ["https://github.com/DevNewbie1826/omo-wish"],
+    }),
+    true,
+  );
+  assert.equal(settingsHaveWishSkill({ packages: ["something-else"] }), false);
+  assert.equal(
+    listMentionsWishSkill("User packages:\n  https://github.com/DevNewbie1826/omo-wish"),
+    true,
+  );
+  assert.equal(listMentionsWishSkill("User packages:\n  (none)"), false);
+});
+
+test("treats /wish as installed only when settings and checkout agree", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "herdr-wish-"));
+  const agent = path.join(root, "agent");
+  const checkout = path.join(agent, "git", "github.com", "DevNewbie1826", "omo-wish");
+  fs.mkdirSync(path.join(checkout, "prompts"), { recursive: true });
+  fs.writeFileSync(path.join(checkout, "package.json"), "{}");
+  fs.writeFileSync(
+    path.join(agent, "settings.json"),
+    JSON.stringify({ packages: ["https://github.com/DevNewbie1826/omo-wish"] }),
+  );
+  assert.equal(
+    isWishSkillInstalled({ home: root, agentDir: agent, cwd: "", listText: "" }),
+    true,
+  );
+  fs.rmSync(path.join(agent, "settings.json"));
+  assert.equal(
+    isWishSkillInstalled({ home: root, agentDir: agent, cwd: "", listText: "" }),
+    false,
+  );
+  fs.rmSync(root, { recursive: true, force: true });
 });
 
 test("collects branch and label names from worktree list", () => {

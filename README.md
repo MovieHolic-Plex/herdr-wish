@@ -93,11 +93,13 @@
 
 [`DevNewbie1826/omo-wish`](https://github.com/DevNewbie1826/omo-wish) 가 그 스킬이다. ultrawork explore, 태스크 묶기, 워크트리·PR, ulw loop. 이 플러그인은 그 주문을 **빠뜨리지 못하게** 앞에 고정한다.
 
+소원을 빌기 **전에** `omo list` / `~/.omo/agent/settings.json` 과 체크아웃을 본다. `/wish` 가 없으면 유저 스코프에 설치한다.
+
 ```sh
-omo install https://github.com/DevNewbie1826/omo-wish
+omo install https://github.com/DevNewbie1826/omo-wish --no-approve
 ```
 
-설치 후 새 omo 세션(또는 `/reload`)부터 메뉴에 `wish — 소원을 빕니다` 가 뜬다. 이 패키지 없이 `/wish` 를 넣으면 스킬이 아니라 그냥 글자다.
+이미 있으면 그대로 두고, 없을 때만 이 명령을 대신 친다. 그 다음 새 워크트리에서 omo를 켜므로 방금 깐 스킬이 세션에 들어간다.
 
 <p align="center">
   <img src="assets/divider.svg" width="560" alt="">
@@ -130,10 +132,11 @@ omo install https://github.com/DevNewbie1826/omo-wish
 
 ## 램프를 켜는 법
 
-준비물: [Herdr](https://herdr.dev) `0.8+` · [Node.js](https://nodejs.org) `18+` · PATH 위의 `omo` · [omo-wish](https://github.com/DevNewbie1826/omo-wish) (`/wish` 스킬)
+준비물: [Herdr](https://herdr.dev) `0.8+` · [Node.js](https://nodejs.org) `18+` · PATH 위의 `omo`
+
+`/wish` 스킬([omo-wish](https://github.com/DevNewbie1826/omo-wish))은 없어도 된다. 첫 소원에서 없으면 설치한다.
 
 ```bash
-omo install https://github.com/DevNewbie1826/omo-wish
 herdr plugin install MovieHolic-Plex/herdr-wish --yes
 ```
 
@@ -261,7 +264,10 @@ git 스페이스, 또는 워크트리 그룹에서 **omo-10**.
 ```mermaid
 flowchart LR
   W["🧞 wish"] --> M["make a wish"]
-  M --> T["worktree × 1"]
+  M --> S{"/wish installed?"}
+  S -->|no| I["omo install omo-wish"]
+  S -->|yes| T["worktree × 1"]
+  I --> T
   T --> O["omo"]
   O --> P["/wish {소원} and commit and make pr"]
   P --> R["PR"]
