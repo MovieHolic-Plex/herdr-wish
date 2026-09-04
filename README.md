@@ -46,7 +46,7 @@
 4. 커밋과 PR을 다시 부탁한다
 
 그 네 줄을 한 칸에 접었다.  
-**wish** 는 문장을 받는다. 뒤에 `and commit and make pr` 을 붙인다. omo가 꺼져 있으면 먼저 깨운다.  
+**wish** 는 문장을 받는다. 워크트리를 하나 새로 열고, 그 칸에서 omo를 켠 뒤 `and commit and make pr` 을 붙인다.  
 **omo-10** 은 git 공간에서 워크트리 10개를 깔고, 칸마다 omo를 켠다.
 
 램프는 마법이 아니다. Herdr CLI를 순서대로 두드리는 플러그인이다.
@@ -57,7 +57,7 @@
 
 | 주문 | 어디서 | 하는 일 |
 | :---: | --- | --- |
-| **wish** | 모든 스페이스 우클릭 | `make a wish` 모달. 입력한 문장 + `and commit and make pr` 을 그 공간의 omo에 넣는다 |
+| **wish** | git 스페이스 우클릭 | `make a wish` 모달. 워크트리 하나를 새로 만들고, 그 칸의 omo에 입력 + `and commit and make pr` 을 넣는다 |
 | **omo-10** | git 스페이스 우클릭 | `omo-1` … `omo-10` 워크트리를 만들고 각 루트 칸에서 `omo` 를 실행한다 |
 
 우클릭 메뉴의 **wish** 모달은 Rename 과 같은 입력 창이다. 제목은 영어 `make a wish`. 힌트는 `omo will commit and make a PR`. 버튼은 `↵ wish`.
@@ -122,11 +122,11 @@ herdr plugin action invoke cast --plugin local.wish
 
 ### wish
 
-1. 스페이스를 우클릭하고 **wish** 를 고른다
+1. git 스페이스를 우클릭하고 **wish** 를 고른다
 2. `make a wish` 에 영어든 한국어든 소원을 적는다
 3. Enter
 
-omo가 이미 그 공간에 있으면 그 칸으로 간다. 없으면 포커스된 칸(없으면 첫 칸)에서 `omo` 를 켜고, 준비가 되면 프롬프트를 넣는다.
+부모 저장소에 워크트리를 하나 만든다. 영어 소원은 `wish-fix-the-login-bug` 같은 브랜치가 되고, 한글만 있으면 `wish-1` 부터 붙는다. 이미 있는 이름은 `-2` 로 밀어 낸다. 새 칸에서 `omo` 를 켠 다음 프롬프트를 넣는다.
 
 보내는 문장은 항상 이런 모양이다.
 
@@ -181,12 +181,10 @@ git 스페이스, 또는 워크트리 그룹에서 **omo-10**.
 ```mermaid
 flowchart TD
   A[우클릭 wish] --> B[make a wish]
-  B -->|Enter| C["{소원} and commit and make pr"]
-  C --> D{그 공간에 omo?}
-  D -->|있다| E[agent prompt]
-  D -->|없다| F[pane run omo]
-  F --> E
-  E --> G[커밋하고 PR]
+  B -->|Enter| C[worktree create 1]
+  C --> D[pane run omo]
+  D --> E["{소원} and commit and make pr"]
+  E --> F[커밋하고 PR]
 
   H[우클릭 omo-10] --> I[worktree create x N]
   I --> J[각 칸에서 omo]

@@ -7,7 +7,9 @@ const path = require("node:path");
 const DEFAULT_COUNT = 10;
 const DEFAULT_COMMAND = "omo";
 const DEFAULT_PREFIX = "omo";
+const WISH_TREE_PREFIX = "wish";
 const PROMPT_SUFFIX = "and commit and make pr";
+const WISH_SLUG_MAX = 40;
 
 function main() {
   const mode = process.argv[2] || "spawn";
@@ -26,13 +28,7 @@ function spawnOmo10() {
     fail("workspace_id is required (right-click a git space, or focus one)");
   }
 
-  const listed = herdrJson(herdr, [
-    "worktree",
-    "list",
-    "--workspace",
-    workspaceId,
-  ]);
-  const createFrom = listed?.source?.source_workspace_id || workspaceId;
+  const { createFrom, listed } = resolveGitFamily(herdr, workspaceId);
   const used = usedBranchNames(listed);
   const names = nextWishNames(used, settings.prefix, settings.count);
 
@@ -65,16 +61,48 @@ function castWish() {
   const workspaceId = resolveWorkspaceId();
   const wish = resolveWishText();
   if (!workspaceId) {
-    fail("workspace_id is required");
+    fail("workspace_id is required (right-click a git space)");
   }
   if (!wish) {
     fail("wish text is empty");
   }
+
+  const { createFrom, listed } = resolveGitFamily(herdr, workspaceId);
+  const name = nextWishTreeName(usedBranchNames(listed), wish);
+  const createdTree = createWorktree(herdr, createFrom, name, true);
+  const paneId = createdTree?.root_pane?.pane_id;
+  if (!paneId) {
+    fail(`worktree create ${name} returned no root pane`);
+  }
+  const newWorkspaceId = createdTree.workspace?.workspace_id;
+  if (newWorkspaceId) {
+    herdrJson(herdr, ["workspace", "focus", newWorkspaceId], { ignoreError: true });
+  }
+
   const prompt = buildPrompt(wish);
-  const paneId = ensureOmoPane(herdr, workspaceId, settings.command);
+  startOmoOnPane(herdr, paneId, settings.command);
   sendPrompt(herdr, paneId, prompt);
   herdrJson(herdr, ["pane", "focus", paneId], { ignoreError: true });
-  process.stdout.write(`wish: sent to ${paneId}\n${prompt}\n`);
+  process.stdout.write(`wish: ${name} -> ${paneId}\n${prompt}\n`);
+}
+
+function resolveGitFamily(herdr, workspaceId) {
+  const listed = herdrJson(herdr, ["worktree", "list", "--workspace", workspaceId], {
+    ignoreError: true,
+  });
+  if (!listed) {
+    fail("needs a git space so it can open a new worktree");
+  }
+  const createFrom = listed.source?.source_workspace_id || workspaceId;
+  if (createFrom !== workspaceId) {
+    const parentListed = herdrJson(
+      herdr,
+      ["worktree", "list", "--workspace", createFrom],
+      { ignoreError: true },
+    );
+    return { createFrom, listed: parentListed || listed };
+  }
+  return { createFrom, listed };
 }
 
 function resolveWishText() {
@@ -100,51 +128,10 @@ function buildPrompt(wish) {
   return `${text} ${PROMPT_SUFFIX}`;
 }
 
-function ensureOmoPane(herdr, workspaceId, command) {
-  const existing = findOmoPane(herdr, workspaceId);
-  if (existing) {
-    return existing;
-  }
-  const paneId = resolveStartPaneId(herdr, workspaceId);
-  if (!paneId) {
-    fail(`no pane in workspace ${workspaceId}`);
-  }
+function startOmoOnPane(herdr, paneId, command) {
   waitForPane(herdr, paneId);
   runInPane(herdr, paneId, command);
   waitForOmo(herdr, paneId, 30000);
-  return paneId;
-}
-
-function resolveStartPaneId(herdr, workspaceId) {
-  const focused = resolveFocusedPaneId();
-  const panes = listPanes(herdr, workspaceId);
-  if (focused && panes.some((pane) => pane.pane_id === focused)) {
-    return focused;
-  }
-  return panes[0]?.pane_id || focused || "";
-}
-
-function resolveFocusedPaneId() {
-  if (process.env.HERDR_PANE_ID) {
-    return process.env.HERDR_PANE_ID;
-  }
-  try {
-    const context = JSON.parse(process.env.HERDR_PLUGIN_CONTEXT_JSON || "{}");
-    return context.focused_pane_id || "";
-  } catch {
-    return "";
-  }
-}
-
-function findOmoPane(herdr, workspaceId) {
-  return listPanes(herdr, workspaceId).find(isOmoPane)?.pane_id || "";
-}
-
-function listPanes(herdr, workspaceId) {
-  const listed = herdrJson(herdr, ["pane", "list", "--workspace", workspaceId], {
-    ignoreError: true,
-  });
-  return listed?.panes || [];
 }
 
 function isOmoPane(pane) {
@@ -247,6 +234,34 @@ function nextWishNames(used, prefix, count) {
   return names;
 }
 
+function slugifyWish(wish) {
+  return String(wish || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, WISH_SLUG_MAX)
+    .replace(/-+$/g, "");
+}
+
+function nextWishTreeName(used, wish) {
+  const names = used instanceof Set ? used : new Set(used);
+  const slug = slugifyWish(wish);
+  if (slug) {
+    const base = `${WISH_TREE_PREFIX}-${slug}`;
+    if (!names.has(base)) {
+      return base;
+    }
+    let n = 2;
+    while (names.has(`${base}-${n}`)) {
+      n += 1;
+    }
+    return `${base}-${n}`;
+  }
+  return nextWishNames(names, WISH_TREE_PREFIX, 1)[0];
+}
+
 function createWorktree(herdr, workspaceId, name, focus) {
   return herdrJson(herdr, [
     "worktree",
@@ -345,7 +360,13 @@ function fail(message) {
   process.exit(1);
 }
 
-module.exports = { nextWishNames, usedBranchNames, buildPrompt };
+module.exports = {
+  nextWishNames,
+  nextWishTreeName,
+  usedBranchNames,
+  buildPrompt,
+  slugifyWish,
+};
 
 if (require.main === module) {
   try {

@@ -2,7 +2,7 @@ id = "local.wish"
 name = "wish"
 version = "0.2.0"
 min_herdr_version = "0.8.0"
-description = "Make a wish: send a prompt to omo and ask it to commit a PR. omo-10 opens 10 worktrees."
+description = "Make a wish: open a new worktree, start omo, and ask it to commit a PR. omo-10 opens 10 worktrees."
 platforms = ["linux", "macos", "windows"]
 
 [[actions]]
@@ -15,6 +15,6 @@ command = ["node", "wish.js", "spawn"]
 [[actions]]
 id = "cast"
 title = "wish"
-description = "Send the wish text to omo and ask it to commit and make a PR"
+description = "Open a new worktree, start omo, and send the wish plus commit-and-PR"
 contexts = ["workspace"]
 command = ["node", "wish.js", "cast"]
