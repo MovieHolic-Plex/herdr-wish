@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 28" role="img" aria-hidden="true">
+  <line x1="40" y1="14" x2="420" y2="14" stroke="#d4a24a" stroke-opacity="0.55"/>
+  <line x1="500" y1="14" x2="880" y2="14" stroke="#d4a24a" stroke-opacity="0.55"/>
+  <polygon points="460,6 468,14 460,22 452,14" fill="#ffd56a"/>
+</svg>

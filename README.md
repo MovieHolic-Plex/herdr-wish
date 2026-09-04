@@ -1,76 +1,114 @@
 <p align="center">
-  <img src="assets/banner.svg" width="920" alt="herdr-wish — make a wish, commit, pull request">
+  <img src="assets/banner.svg" width="100%" alt="herdr-wish — make a wish, new worktree, pull request">
 </p>
-
-```
-              .
-             / \
-            / ✦ \
-           |     |
-            \   /
-          ___\_/___
-         /  * * *  \
-        |  W I S H  |
-         \_________/
-            |   |
-```
-
-# 🧞 herdr-wish
-
-**소원을 적으면, omo가 커밋하고 PR까지 만든다.**
 
 <p align="center">
-  <img src="assets/make-a-wish.png" width="720" alt="make a wish — omo will commit and make a PR">
+  <img src="assets/divider.svg" width="560" alt="">
 </p>
 
-[Herdr](https://herdr.dev) 스페이스에서 우클릭 한 번.  
-램프는 문장을 받고, 에이전트는 브랜치를 밀어 올린다.  
-워크트리 10개가 필요하면 주문을 바꿀 필요 없다. **omo-10**.
+<h1 align="center">🧞 herdr-wish</h1>
 
-[![Herdr](https://img.shields.io/badge/Herdr-0.8+-7C3AED?style=for-the-badge)](https://herdr.dev)
-[![Node](https://img.shields.io/badge/Node-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)
-[![Windows](https://img.shields.io/badge/Windows-macOS-Linux-111827?style=for-the-badge)](https://github.com/MovieHolic-Plex/herdr-wish)
-[![License: MIT](https://img.shields.io/badge/License-MIT-3DDC84?style=for-the-badge)](LICENSE)
+<p align="center">
+  <b>소원 한 줄이면, 새 워크트리에서 omo가 커밋하고 PR까지 민다.</b>
+</p>
 
-[왜](#-왜-램프가-필요한가) · [두 주문](#-두-가지-주문) · [설치](#-설치) · [쓰기](#-쓰기) · [설정](#-설정) · [흐름](#-램프-안에서)
+<p align="center">
+  <i>한 문장. 한 칸. 한 PR.</i>
+</p>
 
----
+<p align="center">
+  <a href="https://herdr.dev"><img src="https://img.shields.io/badge/Herdr-0.8+-7C3AED?style=for-the-badge" alt="Herdr"></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node"></a>
+  <a href="https://github.com/MovieHolic-Plex/herdr-wish/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/MovieHolic-Plex/herdr-wish/test.yml?style=for-the-badge&label=test" alt="test"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-3DDC84?style=for-the-badge" alt="MIT"></a>
+</p>
 
-## 왜 램프가 필요한가
+<p align="center">
+  <a href="https://github.com/MovieHolic-Plex/herdr-wish/stargazers"><img src="https://img.shields.io/github/stars/MovieHolic-Plex/herdr-wish?style=for-the-badge&color=d4a24a" alt="stars"></a>
+  <a href="https://github.com/MovieHolic-Plex/herdr-wish/commits/main"><img src="https://img.shields.io/github/last-commit/MovieHolic-Plex/herdr-wish?style=for-the-badge&color=7c3aed" alt="last commit"></a>
+  <img src="https://img.shields.io/badge/Windows%20·%20macOS%20·%20Linux-111827?style=for-the-badge" alt="platforms">
+</p>
 
-에이전트에게 일을 맡기는 절차는 매번 같다.
+<p align="center">
+  <a href="#-램프를-켜는-법">설치</a> ·
+  <a href="#-두-가지-주문">주문</a> ·
+  <a href="#-쓰기">쓰기</a> ·
+  <a href="#-설정">설정</a> ·
+  <a href="#-램프-안에서">구조</a>
+</p>
 
-1. 워크트리를 만들고
-2. `omo` 를 켜고
-3. 프롬프트를 치고
-4. 커밋과 PR을 다시 부탁한다
+```
+                    .
+                   / \
+                  / ✦ \
+                 |  ~  |
+                  \   /
+                ___\_/___
+               /  * * *  \
+              |  W I S H  |
+               \_________/
+                  |   |
+         right-click · type · enter
+```
 
-그 네 줄을 한 칸에 접었다.  
-**wish** 는 문장을 받는다. 워크트리를 하나 새로 열고, 그 칸에서 omo를 켠 뒤 `and commit and make pr` 을 붙인다.  
-**omo-10** 은 git 공간에서 워크트리 10개를 깔고, 칸마다 omo를 켠다.
+<p align="center">
+  <img src="assets/make-a-wish.png" width="780" alt="make a wish — omo will commit and make a PR">
+</p>
 
-램프는 마법이 아니다. Herdr CLI를 순서대로 두드리는 플러그인이다.
+<p align="center">
+  <code>make a wish</code> &nbsp;→&nbsp; <code>↵ wish</code> &nbsp;→&nbsp; 새 워크트리 &nbsp;→&nbsp; omo &nbsp;→&nbsp; commit + PR
+</p>
 
----
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
+
+## 네 줄이 한 숨이 된다
+
+에이전트에게 일을 맡기는 절차는 매번 같다. 워크트리를 만들고, `omo` 를 켜고, 프롬프트를 치고, 커밋과 PR을 다시 부탁한다.
+
+그 네 줄을 램프 한 칸에 접었다.
+
+<p align="center">
+  <img src="assets/before-after.svg" width="880" alt="before four steps, after one box">
+</p>
+
+램프는 마법이 아니다. [Herdr](https://herdr.dev) CLI를 순서대로 두드리는 플러그인이다.  
+다만 우클릭 한 번으로, **지금 보고 있는 칸을 더럽히지 않는다.**
+
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
 ## 두 가지 주문
 
-| 주문 | 어디서 | 하는 일 |
+<p align="center">
+  <img src="assets/spells.svg" width="880" alt="wish and omo-10">
+</p>
+
+| | **wish** | **omo-10** |
 | :---: | --- | --- |
-| **wish** | git 스페이스 우클릭 | `make a wish` 모달. 워크트리 하나를 새로 만들고, 그 칸의 omo에 입력 + `and commit and make pr` 을 넣는다 |
-| **omo-10** | git 스페이스 우클릭 | `omo-1` … `omo-10` 워크트리를 만들고 각 루트 칸에서 `omo` 를 실행한다 |
+| 소환 | git 스페이스 우클릭 | git 스페이스 우클릭 / `prefix+shift+w` |
+| 워크트리 | **하나.** 영어면 `wish-fix-the-login-bug`, 한글만 있으면 `wish-1` | `omo-1` … `omo-10`. 이미 있으면 이어서 |
+| 에이전트 | 그 칸에서 `omo` | 칸마다 `omo` |
+| 프롬프트 | `{소원} and commit and make pr` | 없음. 열 개만 깐다 |
+| 빈 입력 | 보내지 않음 | — |
 
-우클릭 메뉴의 **wish** 모달은 Rename 과 같은 입력 창이다. 제목은 영어 `make a wish`. 힌트는 `omo will commit and make a PR`. 버튼은 `↵ wish`.
+우클릭 **wish** 는 Rename 과 같은 입력 창이다.  
+제목 `make a wish`. 힌트 `omo will commit and make a PR`. 버튼 `↵ wish`.
 
-비어 있는 소원은 보내지 않는다. 이미 문장 끝에 `and commit and make pr` 이 있으면 한 번 더 붙이지 않는다.
-
+이미 문장 끝에 `and commit and make pr` 이 있으면 한 번 더 붙이지 않는다.  
 `prefix+shift+w` 는 **omo-10** 이다. 소원을 비는 키가 아니다.
 
----
+> 열 개를 진짜로 깐다. 실험은 버려도 되는 저장소에서 하라.
 
-## 설치
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
-준비물: [Herdr](https://herdr.dev) 0.8+, [Node.js](https://nodejs.org) 18+, PATH 위의 `omo`.
+## 램프를 켜는 법
+
+준비물: [Herdr](https://herdr.dev) `0.8+` · [Node.js](https://nodejs.org) `18+` · PATH 위의 `omo`
 
 ```bash
 herdr plugin install MovieHolic-Plex/herdr-wish --yes
@@ -89,7 +127,7 @@ herdr plugin install MovieHolic-Plex/herdr-wish --yes
 herdr plugin link .
 ```
 
-키바인딩은 `~/.config/herdr/config.toml` 또는 Windows의 `%APPDATA%\herdr\config.toml`:
+키는 `~/.config/herdr/config.toml` 또는 Windows `%APPDATA%\herdr\config.toml`.
 
 ```toml
 [[keys.command]]
@@ -102,51 +140,51 @@ description = "omo-10: 10 worktrees + omo"
 key = "prefix+shift+e"
 type = "plugin_action"
 command = "local.wish.cast"
-description = "wish: send selected text to omo"
+description = "wish: selected text to a new worktree"
 ```
 
 `local.wish.cast` 는 터미널에서 **선택한 글** 을 소원으로 쓴다.  
-모달 입력창은 커스텀 Herdr 클라이언트에 들어 있다. 스톡 Herdr 에서는 선택 영역 + `cast` 키, 또는 아래 환경 변수로 같은 일을 한다.
+모달 입력창은 커스텀 Herdr 클라이언트에 들어 있다. 스톡 Herdr 에서는 선택 영역 + `cast`, 또는:
 
 ```bash
-# 포커스된 git 공간에 소원을 직접 던질 때
 set WISH_TEXT=fix the login bug
 herdr plugin action invoke cast --plugin local.wish
 ```
 
-플러그인 id 는 `local.wish` 다. 액션은 `cast` (wish) 와 `spawn` (omo-10).
+플러그인 id 는 `local.wish`. 액션은 `cast` (wish) · `spawn` (omo-10).
 
----
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
 ## 쓰기
 
-### wish
+### wish — 소원 하나, 칸 하나
 
-1. git 스페이스를 우클릭하고 **wish** 를 고른다
-2. `make a wish` 에 영어든 한국어든 소원을 적는다
+1. git 스페이스를 우클릭하고 **wish**
+2. `make a wish` 에 영어든 한국어든 적는다
 3. Enter
 
-부모 저장소에 워크트리를 하나 만든다. 영어 소원은 `wish-fix-the-login-bug` 같은 브랜치가 되고, 한글만 있으면 `wish-1` 부터 붙는다. 이미 있는 이름은 `-2` 로 밀어 낸다. 새 칸에서 `omo` 를 켠 다음 프롬프트를 넣는다.
-
-보내는 문장은 항상 이런 모양이다.
+부모 저장소에 워크트리를 **새로** 만든다.  
+영어 소원은 `wish-fix-the-login-bug`. 한글만 있으면 `wish-1`부터. 이미 있는 이름은 `-2`로 민다.  
+새 칸에서 `omo`를 켠 다음 프롬프트를 넣는다.
 
 ```
 fix the login bug and commit and make pr
 ```
 
-### omo-10
+### omo-10 — 한 번에 열 칸
 
 git 스페이스, 또는 워크트리 그룹에서 **omo-10**.  
-이미 `omo-1` 이 있으면 `omo-11` 부터 이어 간다. 링크된 워크트리 위에서 눌러도 부모 저장소에 만든다.
+링크된 워크트리 위에서 눌러도 부모 저장소에 만든다.
 
-열 개를 진짜로 깐다. 실험은 버려도 되는 저장소에서 하라.
-
----
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
 ## 설정
 
-`herdr plugin config-dir local.wish` 가 가리키는 폴더의 `config.json`.
-
+`herdr plugin config-dir local.wish` 폴더의 `config.json`.  
 예시는 [`config.example.json`](config.example.json).
 
 ```json
@@ -157,57 +195,75 @@ git 스페이스, 또는 워크트리 그룹에서 **omo-10**.
 }
 ```
 
-| 키 | 기본 | 의미 |
-| --- | :---: | --- |
-| `count` | `10` | omo-10 이 만들 워크트리 수 |
-| `command` | `omo` | 각 칸에서 실행할 에이전트 |
-| `branchPrefix` | `omo` | 브랜치/라벨 접두사. `omo-1`, `omo-2`, … |
+<table>
+  <tr>
+    <th>키</th>
+    <th>기본</th>
+    <th>의미</th>
+  </tr>
+  <tr>
+    <td><code>count</code></td>
+    <td align="center"><code>10</code></td>
+    <td>omo-10 이 만들 워크트리 수</td>
+  </tr>
+  <tr>
+    <td><code>command</code></td>
+    <td align="center"><code>omo</code></td>
+    <td>각 칸에서 실행할 에이전트</td>
+  </tr>
+  <tr>
+    <td><code>branchPrefix</code></td>
+    <td align="center"><code>omo</code></td>
+    <td>omo-10 브랜치/라벨. <code>omo-1</code>, <code>omo-2</code>, …</td>
+  </tr>
+</table>
 
 환경 변수가 파일을 덮는다.
 
 | 변수 | 역할 |
 | --- | --- |
-| `WISH_TEXT` | 모달/`selected_text` 대신 쓸 소원 |
+| `WISH_TEXT` | 모달 / `selected_text` 대신 쓸 소원 |
 | `WISH_COUNT` | 워크트리 개수 |
 | `WISH_COMMAND` | 에이전트 명령 |
-| `WISH_PREFIX` | 브랜치 접두사 |
+| `WISH_PREFIX` | omo-10 브랜치 접두사 |
 
-이 저장소에는 키도, 토큰도, 실제 `config.json` 도 없다.
+이 저장소에는 키도, 토큰도, 실제 `config.json` 도 **없다.**
 
----
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
 ## 램프 안에서
 
 ```mermaid
-flowchart TD
-  A[우클릭 wish] --> B[make a wish]
-  B -->|Enter| C[worktree create 1]
-  C --> D[pane run omo]
-  D --> E["{소원} and commit and make pr"]
-  E --> F[커밋하고 PR]
+flowchart LR
+  W["🧞 wish"] --> M["make a wish"]
+  M --> T["worktree × 1"]
+  T --> O["omo"]
+  O --> P["{wish} and commit and make pr"]
+  P --> R["PR"]
 
-  H[우클릭 omo-10] --> I[worktree create x N]
-  I --> J[각 칸에서 omo]
+  X["✨ omo-10"] --> N["worktree × 10"]
+  N --> Y["omo × 10"]
 ```
 
 | 파일 | 역할 |
 | --- | --- |
-| `herdr-plugin.toml` | 플러그인 id `local.wish`, 액션 `cast` / `spawn` |
-| `wish.js` | Herdr CLI로 워크트리·pane·prompt |
+| `herdr-plugin.toml` | id `local.wish` · `cast` / `spawn` |
+| `wish.js` | Herdr CLI로 워크트리 · pane · prompt |
 | `wish.test.js` | 이름 고르기와 프롬프트 접미사 |
 
-Herdr 플러그인 v1 은 별도 SDK 가 없다. `HERDR_BIN_PATH` 로 그 세션의 `herdr` 을 부른다.
-
----
-
-## 테스트
+별도 SDK는 없다. `HERDR_BIN_PATH` 가 그 세션의 `herdr` 이다.
 
 ```bash
 node --test wish.test.js
 ```
 
----
+<p align="center">
+  <img src="assets/divider.svg" width="560" alt="">
+</p>
 
-## 라이선스
-
-[MIT](LICENSE) — 소원을 포크해도, 램프를 다른 에이전트에 꽂아도 된다.
+<p align="center">
+  <b><a href="LICENSE">MIT</a></b><br>
+  소원을 포크해도, 램프를 다른 에이전트에 꽂아도 된다.
+</p>

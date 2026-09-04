@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 210" role="img" aria-label="before and after">
+  <rect x="8" y="8" width="528" height="194" rx="20" fill="#140c14" stroke="#6b5a7a"/>
+  <text x="36" y="48" fill="#f87171" font-family="ui-monospace, Consolas, monospace" font-size="13" letter-spacing="3">BEFORE</text>
+  <text x="36" y="88" fill="#e7e0ef" font-family="ui-monospace, Consolas, monospace" font-size="16">1. worktree create</text>
+  <text x="36" y="116" fill="#e7e0ef" font-family="ui-monospace, Consolas, monospace" font-size="16">2. omo</text>
+  <text x="36" y="144" fill="#e7e0ef" font-family="ui-monospace, Consolas, monospace" font-size="16">3. type the prompt</text>
+  <text x="36" y="172" fill="#e7e0ef" font-family="ui-monospace, Consolas, monospace" font-size="16">4. ask for commit + PR</text>
+
+  <rect x="564" y="8" width="528" height="194" rx="20" fill="#1a1220" stroke="#d4a24a" stroke-width="2"/>
+  <text x="592" y="48" fill="#ffd56a" font-family="ui-monospace, Consolas, monospace" font-size="13" letter-spacing="3">AFTER</text>
+  <text x="592" y="100" fill="#fff6d6" font-family="Georgia, Times New Roman, serif" font-size="28">make a wish</text>
+  <text x="592" y="142" fill="#e8d7ff" font-family="Georgia, Times New Roman, serif" font-size="18">Enter. Isolated tree. PR.</text>
+  <text x="592" y="176" fill="#9b8bb0" font-family="ui-monospace, Consolas, monospace" font-size="14">four steps become one box</text>
+</svg>
