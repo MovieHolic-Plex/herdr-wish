@@ -1,6 +1,6 @@
 id = "local.wish"
 name = "wish"
-version = "0.2.1"
+version = "0.2.2"
 min_herdr_version = "0.8.0"
 description = "Make a wish: open a new worktree, start omo, and force /wish plus commit-and-PR. omo-10 opens 10 worktrees."
 platforms = ["linux", "macos", "windows"]
@@ -18,3 +18,18 @@ title = "wish"
 description = "Open a new worktree, start omo, and send /wish plus commit-and-PR"
 contexts = ["workspace"]
 command = ["node", "wish.js", "cast"]
+
+[[actions]]
+id = "ask"
+title = "make a wish"
+description = "Open the make a wish popup (multiline, no length trap)"
+contexts = ["workspace", "global"]
+command = ["node", "wish.js", "open-ask"]
+
+[[panes]]
+id = "ask"
+title = "make a wish"
+placement = "popup"
+width = "90%"
+height = 22
+command = ["node", "wish.js", "ask"]

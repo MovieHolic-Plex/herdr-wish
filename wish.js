@@ -12,9 +12,20 @@ const SKILL_PREFIX = "/wish";
 const PROMPT_SUFFIX = "and commit and make pr";
 const WISH_SKILL_SOURCE = "https://github.com/DevNewbie1826/omo-wish";
 const WISH_SLUG_MAX = 40;
+const ARGV_SOFT_BYTES = 1200;
+const SEND_CHUNK_BYTES = 700;
+const WISH_FILE_NAME = "WISH.md";
 
 function main() {
   const mode = process.argv[2] || "spawn";
+  if (mode === "ask") {
+    askWish();
+    return;
+  }
+  if (mode === "open-ask") {
+    openAskPane();
+    return;
+  }
   if (mode === "cast") {
     castWish();
     return;
@@ -83,11 +94,73 @@ function castWish() {
     herdrJson(herdr, ["workspace", "focus", newWorkspaceId], { ignoreError: true });
   }
 
-  const prompt = buildPrompt(wish);
+  const fullPrompt = buildPrompt(wish);
+  const worktreePath = createdTree.worktree?.path || "";
+  if (worktreePath) {
+    writeWishFile(worktreePath, wish, fullPrompt);
+  }
+  const prompt = promptForOmo(fullPrompt);
   startOmoOnPane(herdr, paneId, settings.command);
   sendPrompt(herdr, paneId, prompt);
   herdrJson(herdr, ["pane", "focus", paneId], { ignoreError: true });
   process.stdout.write(`wish: ${name} -> ${paneId}\n${prompt}\n`);
+}
+
+function openAskPane() {
+  herdrJson(bin(), askPaneArgs(resolveWorkspaceId()));
+}
+
+function askPaneArgs(workspaceId) {
+  const args = [
+    "plugin",
+    "pane",
+    "open",
+    "--plugin",
+    "local.wish",
+    "--entrypoint",
+    "ask",
+    "--placement",
+    "popup",
+    "--width",
+    "90%",
+    "--height",
+    "22",
+  ];
+  if (workspaceId) {
+    args.push("--env", `WISH_WORKSPACE_ID=${workspaceId}`);
+  }
+  return args;
+}
+
+function askWish() {
+  process.stdout.write("make a wish\n");
+  process.stdout.write("omo /wish — commit and make a PR\n");
+  process.stdout.write("Type freely. End with a line that is only .  (or Ctrl+D)\n\n");
+  const lines = [];
+  const rl = require("node:readline").createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  rl.on("line", (line) => {
+    if (line.trim() === ".") {
+      rl.close();
+      return;
+    }
+    lines.push(line);
+  });
+  rl.on("close", () => {
+    const wish = lines.join("\n").trim();
+    if (!wish) {
+      fail("wish text is empty");
+    }
+    process.env.WISH_TEXT = wish;
+    try {
+      castWish();
+      process.exit(0);
+    } catch (error) {
+      fail(error.message || String(error));
+    }
+  });
 }
 
 function resolveGitFamily(herdr, workspaceId) {
@@ -134,6 +207,44 @@ function buildPrompt(wish) {
     ? body
     : `${body} ${PROMPT_SUFFIX}`;
   return `${SKILL_PREFIX} ${withSuffix}`;
+}
+
+function writeWishFile(worktreePath, wish, prompt) {
+  const file = path.join(worktreePath, WISH_FILE_NAME);
+  const body = `# Wish\n\n${String(wish || "").trim()}\n\n---\n\nSent to omo:\n\n\`\`\`\n${prompt}\n\`\`\`\n`;
+  fs.writeFileSync(file, body, "utf8");
+  return file;
+}
+
+function promptForOmo(fullPrompt) {
+  if (byteLength(fullPrompt) <= ARGV_SOFT_BYTES) {
+    return fullPrompt;
+  }
+  return `${SKILL_PREFIX} Follow ${WISH_FILE_NAME} in this worktree. ${PROMPT_SUFFIX}`;
+}
+
+function byteLength(text) {
+  return Buffer.byteLength(String(text || ""), "utf8");
+}
+
+function splitUtf8(text, maxBytes) {
+  const chunks = [];
+  let current = "";
+  for (const ch of String(text || "")) {
+    const next = current + ch;
+    if (byteLength(next) > maxBytes) {
+      if (current) {
+        chunks.push(current);
+      }
+      current = ch;
+    } else {
+      current = next;
+    }
+  }
+  if (current) {
+    chunks.push(current);
+  }
+  return chunks;
 }
 
 function ensureWishSkill() {
@@ -263,13 +374,17 @@ function waitForOmo(herdr, paneId, timeoutMs) {
 }
 
 function sendPrompt(herdr, paneId, text) {
-  const prompted = herdrJson(herdr, ["agent", "prompt", paneId, text], {
-    ignoreError: true,
-  });
-  if (prompted) {
-    return;
+  if (byteLength(text) <= ARGV_SOFT_BYTES) {
+    const prompted = herdrJson(herdr, ["agent", "prompt", paneId, text], {
+      ignoreError: true,
+    });
+    if (prompted) {
+      return;
+    }
   }
-  herdrJson(herdr, ["pane", "send-text", paneId, text]);
+  for (const chunk of splitUtf8(text, SEND_CHUNK_BYTES)) {
+    herdrJson(herdr, ["pane", "send-text", paneId, chunk]);
+  }
   herdrJson(herdr, ["pane", "send-keys", paneId, "enter"]);
 }
 
@@ -303,6 +418,9 @@ function readConfigFile() {
 }
 
 function resolveWorkspaceId() {
+  if (process.env.WISH_WORKSPACE_ID) {
+    return process.env.WISH_WORKSPACE_ID;
+  }
   if (process.env.HERDR_WORKSPACE_ID) {
     return process.env.HERDR_WORKSPACE_ID;
   }
@@ -476,7 +594,11 @@ module.exports = {
   isWishSkillInstalled,
   settingsHaveWishSkill,
   listMentionsWishSkill,
+  promptForOmo,
+  splitUtf8,
+  askPaneArgs,
   WISH_SKILL_SOURCE,
+  WISH_FILE_NAME,
 };
 
 if (require.main === module) {

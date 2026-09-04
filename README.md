@@ -9,11 +9,11 @@
 <h1 align="center">🧞 herdr-wish</h1>
 
 <p align="center">
-  <b>소원 한 줄이면, 새 워크트리에서 omo에 <code>/wish</code> 를 강제로 넣는다.</b>
+  <b>소원을 적으면, 새 워크트리에서 omo에 <code>/wish</code> 를 강제로 넣는다.</b>
 </p>
 
 <p align="center">
-  <i>한 문장. 한 칸. <code>/wish</code>. mass ulw DAG. APPROVED 가 나올 때까지.</i>
+  <i>한 칸. <code>/wish</code>. mass ulw DAG. APPROVED 가 나올 때까지.</i>
 </p>
 
 <p align="center">
@@ -51,7 +51,7 @@
               |  W I S H  |
                \_________/
                   |   |
-         right-click · type · enter
+         prefix+shift+e · type · .
 ```
 
 <p align="center">
@@ -77,7 +77,7 @@
 </p>
 
 램프는 마법이 아니다. [Herdr](https://herdr.dev) 가 칸을 열고, [omo `/wish`](https://github.com/DevNewbie1826/omo-wish) 가 일을 한다.  
-우클릭 한 번으로 **지금 보고 있는 칸을 더럽히지 않고**, omo 입력창에 `/wish` 를 직접 치지 않아도 된다.
+지금 보고 있는 칸을 더럽히지 않고, omo 입력창에 `/wish` 를 직접 치지 않아도 된다.
 
 <p align="center">
   <img src="assets/divider.svg" width="560" alt="">
@@ -85,7 +85,7 @@
 
 ## 핵심: /wish
 
-이게 이 플러그인의 전부다. 모달에 적은 문장은 평범한 채팅으로 가지 않는다. omo 슬래시 스킬 **`/wish`** 로 들어간다.
+팝업에 적은 문장은 평범한 채팅으로 가지 않는다. omo 슬래시 스킬 **`/wish`** 로 들어간다.
 
 ```
 /wish fix the login bug and commit and make pr
@@ -208,16 +208,13 @@ flowchart TB
 
 | | **wish** | **omo-10** |
 | :---: | --- | --- |
-| 소환 | git 스페이스 우클릭 | git 스페이스 우클릭 / `prefix+shift+w` |
+| 소환 | `prefix+shift+e` 팝업 | `prefix+shift+w` |
 | 워크트리 | **하나.** 영어면 `wish-fix-the-login-bug`, 한글만 있으면 `wish-1` | `omo-1` … `omo-10`. 이미 있으면 이어서 |
 | 에이전트 | 그 칸에서 `omo` | 칸마다 `omo` |
 | 프롬프트 | **강제** <code>/wish {소원} and commit and make pr</code> | 없음. 열 개만 깐다 |
-| 빈 입력 | 보내지 않음 | — |
+| 긴 글 | 워크트리의 `WISH.md`. omo 에는 짧으면 전문, 길면 `Follow WISH.md` | — |
 
-우클릭 **wish** 는 Rename 과 같은 입력 창이다.  
-제목 `make a wish`. 힌트 `omo /wish — commit and make a PR`. 버튼 `↵ wish`.
-
-`prefix+shift+w` 는 **omo-10** 이다. 소원을 비는 키가 아니다.
+스톡 Herdr 에는 우클릭 **wish** 가 없다. 플러그인 v1 이 메뉴를 등록하지 못한다. 입력창은 `local.wish.ask` 팝업이다.
 
 > 열 개를 진짜로 깐다. 실험은 버려도 되는 저장소에서 하라.
 
@@ -252,27 +249,30 @@ herdr plugin link .
 
 ```toml
 [[keys.command]]
+key = "prefix+shift+e"
+type = "plugin_action"
+command = "local.wish.ask"
+description = "make a wish popup"
+
+[[keys.command]]
 key = "prefix+shift+w"
 type = "plugin_action"
 command = "local.wish.spawn"
 description = "omo-10: 10 worktrees + omo"
-
-[[keys.command]]
-key = "prefix+shift+e"
-type = "plugin_action"
-command = "local.wish.cast"
-description = "wish: selected text to a new worktree"
 ```
 
-`local.wish.cast` 는 터미널에서 **선택한 글** 을 소원으로 쓴다.  
-모달 입력창은 커스텀 Herdr 클라이언트에 들어 있다. 스톡 Herdr 에서는 선택 영역 + `cast`, 또는:
+플러그인 id 는 `local.wish`.
+
+| 액션 | 하는 일 |
+| --- | --- |
+| `ask` | 팝업을 연다. 여러 줄 가능. `.` 한 줄 또는 Ctrl+D 로 끝 |
+| `cast` | 이미 있는 글(`WISH_TEXT` / 선택 영역)을 바로 던진다 |
+| `spawn` | omo-10 |
 
 ```bash
 set WISH_TEXT=fix the login bug
 herdr plugin action invoke cast --plugin local.wish
 ```
-
-플러그인 id 는 `local.wish`. 액션은 `cast` (wish) · `spawn` (omo-10).
 
 <p align="center">
   <img src="assets/divider.svg" width="560" alt="">
@@ -282,13 +282,12 @@ herdr plugin action invoke cast --plugin local.wish
 
 ### wish — 소원 하나, 칸 하나
 
-1. git 스페이스를 우클릭하고 **wish**
-2. `make a wish` 에 영어든 한국어든 적는다
-3. Enter
+git 스페이스에 포커스하고 `prefix+shift+e`.  
+팝업에 영어든 한국어든 적는다. 점 하나(`.`)만 있는 줄로 끝낸다.
 
 부모 저장소에 워크트리를 **새로** 만든다.  
 영어 소원은 `wish-fix-the-login-bug`. 한글만 있으면 `wish-1`부터. 이미 있는 이름은 `-2`로 민다.  
-새 칸에서 `omo`를 켠 다음, 아래를 **그대로** 넣는다.
+전체 소원은 그 칸의 `WISH.md` 에 남는다.
 
 ```
 /wish fix the login bug and commit and make pr
@@ -296,7 +295,7 @@ herdr plugin action invoke cast --plugin local.wish
 
 ### omo-10 — 한 번에 열 칸
 
-git 스페이스, 또는 워크트리 그룹에서 **omo-10**.  
+git 스페이스에 포커스하고 `prefix+shift+w`.  
 링크된 워크트리 위에서 눌러도 부모 저장소에 만든다.
 
 <p align="center">
@@ -316,34 +315,17 @@ git 스페이스, 또는 워크트리 그룹에서 **omo-10**.
 }
 ```
 
-<table>
-  <tr>
-    <th>키</th>
-    <th>기본</th>
-    <th>의미</th>
-  </tr>
-  <tr>
-    <td><code>count</code></td>
-    <td align="center"><code>10</code></td>
-    <td>omo-10 이 만들 워크트리 수</td>
-  </tr>
-  <tr>
-    <td><code>command</code></td>
-    <td align="center"><code>omo</code></td>
-    <td>각 칸에서 실행할 에이전트</td>
-  </tr>
-  <tr>
-    <td><code>branchPrefix</code></td>
-    <td align="center"><code>omo</code></td>
-    <td>omo-10 브랜치/라벨. <code>omo-1</code>, <code>omo-2</code>, …</td>
-  </tr>
-</table>
+| 키 | 기본 | 의미 |
+| --- | :---: | --- |
+| `count` | `10` | omo-10 이 만들 워크트리 수 |
+| `command` | `omo` | 각 칸에서 실행할 에이전트 |
+| `branchPrefix` | `omo` | omo-10 브랜치/라벨. `omo-1`, `omo-2`, … |
 
 환경 변수가 파일을 덮는다.
 
 | 변수 | 역할 |
 | --- | --- |
-| `WISH_TEXT` | 모달 / `selected_text` 대신 쓸 소원 |
+| `WISH_TEXT` | 팝업 대신 쓸 소원 |
 | `WISH_COUNT` | 워크트리 개수 |
 | `WISH_COMMAND` | 에이전트 명령 |
 | `WISH_PREFIX` | omo-10 브랜치 접두사 |
@@ -358,13 +340,14 @@ git 스페이스, 또는 워크트리 그룹에서 **omo-10**.
 
 ```mermaid
 flowchart LR
-  W["🧞 wish"] --> M["make a wish"]
+  W["🧞 wish"] --> M["make a wish popup"]
   M --> S{"/wish installed?"}
   S -->|no| I["omo install omo-wish"]
   S -->|yes| T["worktree × 1"]
   I --> T
-  T --> O["omo"]
-  O --> P["/wish {소원} and commit and make pr"]
+  T --> F["WISH.md"]
+  F --> O["omo"]
+  O --> P["/wish … or Follow WISH.md"]
   P --> R["PR"]
 
   X["✨ omo-10"] --> N["worktree × 10"]
@@ -373,8 +356,8 @@ flowchart LR
 
 | 파일 | 역할 |
 | --- | --- |
-| `herdr-plugin.toml` | id `local.wish` · `cast` / `spawn` |
-| `wish.js` | Herdr CLI로 워크트리 · pane · prompt |
+| `herdr-plugin.toml` | id `local.wish` · `ask` / `cast` / `spawn` · 팝업 pane |
+| `wish.js` | Herdr CLI로 워크트리 · pane · prompt · `WISH.md` |
 | `wish.test.js` | 이름 고르기와 프롬프트 접미사 |
 
 별도 SDK는 없다. `HERDR_BIN_PATH` 가 그 세션의 `herdr` 이다.

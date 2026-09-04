@@ -1,6 +1,6 @@
 {
   "name": "herdr-wish",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "description": "Herdr plugin: force omo /wish on a new worktree, then commit and PR. omo-10 opens 10 worktrees.",
   "license": "MIT",

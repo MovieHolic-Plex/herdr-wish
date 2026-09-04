@@ -11,6 +11,10 @@ const {
   usedBranchNames,
   buildPrompt,
   slugifyWish,
+  promptForOmo,
+  splitUtf8,
+  askPaneArgs,
+  WISH_FILE_NAME,
   isWishSkillInstalled,
   settingsHaveWishSkill,
   listMentionsWishSkill,
@@ -48,6 +52,26 @@ test("forces the omo /wish skill and appends commit-and-PR once", () => {
     "/wish fix login and commit and make pr",
   );
   assert.equal(buildPrompt("/wish"), "/wish");
+});
+
+test("long wishes become a short /wish that points at WISH.md", () => {
+  const short = "/wish fix login and commit and make pr";
+  assert.equal(promptForOmo(short), short);
+  const long = `/wish ${"아주 긴 소원 ".repeat(200)} and commit and make pr`;
+  assert.equal(
+    promptForOmo(long),
+    `/wish Follow ${WISH_FILE_NAME} in this worktree. and commit and make pr`,
+  );
+  assert.ok(splitUtf8(long, 700).every((chunk) => Buffer.byteLength(chunk) <= 700));
+  assert.equal(splitUtf8(long, 700).join(""), long);
+});
+
+test("ask popup does not pass --workspace (stock Herdr rejects it)", () => {
+  const args = askPaneArgs("workspace_3");
+  assert.equal(args.includes("--workspace"), false);
+  assert.ok(args.includes("--env"));
+  assert.ok(args.includes("WISH_WORKSPACE_ID=workspace_3"));
+  assert.ok(args.includes("popup"));
 });
 
 test("names a wish worktree from the prompt slug", () => {
