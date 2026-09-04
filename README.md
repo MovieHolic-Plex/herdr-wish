@@ -19,6 +19,10 @@
 
 **소원을 적으면, omo가 커밋하고 PR까지 만든다.**
 
+<p align="center">
+  <img src="assets/make-a-wish.png" width="720" alt="make a wish — omo will commit and make a PR">
+</p>
+
 [Herdr](https://herdr.dev) 스페이스에서 우클릭 한 번.  
 램프는 문장을 받고, 에이전트는 브랜치를 밀어 올린다.  
 워크트리 10개가 필요하면 주문을 바꿀 필요 없다. **omo-10**.
@@ -29,10 +33,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-3DDC84?style=for-the-badge)](LICENSE)
 
 [왜](#-왜-램프가-필요한가) · [두 주문](#-두-가지-주문) · [설치](#-설치) · [쓰기](#-쓰기) · [설정](#-설정) · [흐름](#-램프-안에서)
-
-<p align="center">
-  <img src="assets/modal.svg" width="480" alt="make a wish modal">
-</p>
 
 ---
 
